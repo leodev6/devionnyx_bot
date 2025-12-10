@@ -21,7 +21,6 @@ telegram:
   bot:
     token: ${TELEGRAM_BOT_TOKEN:your-bot-token}
     username: ${TELEGRAM_BOT_USERNAME:your-bot-username}
-    group-id: ${TELEGRAM_GROUP_ID:}
 
 youtube:
   api:

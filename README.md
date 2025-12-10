@@ -62,29 +62,56 @@ mvn clean package
 java -jar target/telegram-bot-1.0.0.jar
 ```
 
-## Déploiement sur Render.com
+## Déploiement sur Railway
 
-1. Créez un compte sur [Render.com](https://render.com)
+1. Créez un compte sur [Railway](https://railway.app)
 
-2. Créez une base de données PostgreSQL :
-   - New → PostgreSQL
-   - Notez l'URL de connexion
-
-3. Créez un Web Service :
-   - New → Web Service
+2. Créez un nouveau projet :
+   - Cliquez sur "New Project"
+   - Sélectionnez "Deploy from GitHub repo"
    - Connectez votre repository GitHub
-   - Build Command : `mvn clean package`
-   - Start Command : `java -jar target/telegram-bot-1.0.0.jar`
-   - Ajoutez toutes les variables d'environnement
+   - Sélectionnez le repository du bot
 
-4. Configurez le webhook Telegram :
-   - Dans votre service Render, récupérez l'URL HTTPS (ex: `https://your-app.onrender.com`)
+3. Ajoutez une base de données PostgreSQL :
+   - Dans votre projet Railway, cliquez sur "+ New"
+   - Sélectionnez "Database" → "PostgreSQL"
+   - Railway créera automatiquement la base de données
+
+4. Configurez les variables d'environnement :
+   - Dans votre service, allez dans l'onglet "Variables"
+   - Ajoutez les variables suivantes :
+     ```
+     DATABASE_URL=<URL fournie par Railway PostgreSQL>
+     DATABASE_USER=postgres
+     DATABASE_PASSWORD=<mot de passe fourni par Railway>
+     TELEGRAM_BOT_TOKEN=votre-token-bot
+     TELEGRAM_BOT_USERNAME=votre-bot-username
+     TELEGRAM_GROUP_ID=votre-group-id (optionnel - voir OBTENIR_GROUP_ID.md)
+     YOUTUBE_API_KEY=votre-youtube-api-key
+     YOUTUBE_CHANNEL_ID=votre-channel-id
+     FORMATION_LINK=https://youtu.be/x6yepLvHctk
+     PORT=8080
+     ```
+   - **Note** : Railway fournit automatiquement `DATABASE_URL`, `DATABASE_USER`, `DATABASE_PASSWORD` via les variables de service PostgreSQL
+   - **Note** : `TELEGRAM_GROUP_ID` est optionnel. Sans lui, les notifications YouTube ne seront pas envoyées, mais le bot fonctionnera normalement pour les autres fonctionnalités
+
+5. Déployez :
+   - Railway détectera automatiquement le fichier `railway.json` ou `railway.toml`
+   - Le build se lancera automatiquement
+   - Une fois déployé, récupérez l'URL HTTPS de votre service
+
+6. Configurez le webhook Telegram :
+   - Récupérez l'URL HTTPS de votre service Railway (ex: `https://your-app.up.railway.app`)
    - Configurez le webhook :
    ```bash
-   curl https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://your-app.onrender.com/webhook
+   curl https://api.telegram.org/bot<TOKEN>/setWebhook?url=https://your-app.up.railway.app/webhook
    ```
 
-5. Note : Pour le free tier, Render met l'app en veille après inactivité. Le webhook Telegram réveillera automatiquement l'app.
+7. **Avantages Railway** :
+   - Pas de mise en veille (contrairement à Render free tier)
+   - Déploiement automatique depuis GitHub
+   - Base de données PostgreSQL incluse
+   - HTTPS automatique
 
 ## Structure du projet
 
