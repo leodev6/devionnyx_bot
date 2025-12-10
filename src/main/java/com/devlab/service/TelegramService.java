@@ -19,6 +19,10 @@ public class TelegramService extends DefaultAbsSender {
     }
 
     public void sendMessageToGroup(String text) {
+        if (groupId == null || groupId.isEmpty() || groupId.equals("your-group-id")) {
+            System.out.println("⚠️ TELEGRAM_GROUP_ID non configuré. Les notifications YouTube ne seront pas envoyées.");
+            return;
+        }
         SendMessage message = new SendMessage();
         message.setChatId(groupId);
         message.setText(text);
@@ -31,6 +35,10 @@ public class TelegramService extends DefaultAbsSender {
     }
 
     public void sendPhotoToGroup(String photoUrl, String caption) {
+        if (groupId == null || groupId.isEmpty() || groupId.equals("your-group-id")) {
+            System.out.println("⚠️ TELEGRAM_GROUP_ID non configuré. Les notifications YouTube ne seront pas envoyées.");
+            return;
+        }
         SendPhoto photo = new SendPhoto();
         photo.setChatId(groupId);
         photo.setPhoto(new InputFile(photoUrl));
